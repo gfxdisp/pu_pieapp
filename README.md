@@ -4,7 +4,7 @@ Increasing popularity of HDR image and video content brings the need for metrics
 
 If using the trained metrics, or the dataset, please cite:
 
-Aliaksei Mikhailiuk, Maria Perez-Ortiz, Dingcheng Yue, Wilson Suen, Rafal K. Mantiuk. Consolidated Dataset and Metrics for High-Dynamic-Range Image Quality IEEE Transactions on Computational Imaging, (under review), 2020 
+Aliaksei Mikhailiuk, Maria Perez-Ortiz, Dingcheng Yue, Wilson Suen, Rafal K. Mantiuk. Consolidated Dataset and Metrics for High-Dynamic-Range Image Quality. IEEE Transactions on Computational Imaging, (under review), 2020 
 
 ## Repository overview
 
