@@ -10,6 +10,7 @@ The code runs in Python3 with Pytorch. First install the required dependencies:
 ```
 pip3 install -r requirements.txt
 
+```
 
 ## Citing
 
