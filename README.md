@@ -8,7 +8,11 @@ Increasing popularity of HDR image and video content brings the need for metrics
 
 ## Usage
 
-The code runs in Python3 with Pytorch. First install the required dependencies:
+Download the weights:
+
+
+
+The code runs in Python3 with Pytorch. Dependencies can be installed by running:
 
 ```
 pip3 install -r requirements.txt
