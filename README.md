@@ -1,6 +1,6 @@
 # PU-PieAPP - Deep Photometric Image Quality Metric
 
-The repository contains the code for the Deep High-Dynamic-Range Image Quality metric -- PUPieApp trained on the [Unified Photometric Image Quality (UPIQ) dataset](https://www.repository.cam.ac.uk/handle/1810/315373)
+The repository contains the code for the Deep High-Dynamic-Range Image Quality metric -- PU-PieAPP trained on the [Unified Photometric Image Quality (UPIQ) dataset](https://www.repository.cam.ac.uk/handle/1810/315373)
 
 ## Description
 
