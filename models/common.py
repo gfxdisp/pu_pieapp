@@ -1,28 +1,34 @@
 import torch as pt
 import torch.nn as nn
 import torch.nn.functional as F
+from models.simple import FeatureExtractor, Comparitor, PUTransformer, PerceptualLossFeatureExtractor,DimTransformer
 
 class PerceptLossNet(nn.Module):
-    def __init__(self,pu_transformer, extract_net):
+    def __init__(self, state):
         nn.Module.__init__(self)
-        self.pu_transformer = pu_transformer
-        self.extractor = extract_net
+        self.pu_transformer = PUTransformer()
+        self.extractor = PerceptualLossFeatureExtractor()
+
+        if state:
+            self.extractor.load_state_dict(state['extractor'])
 
     def forward(self, img, im_type='ldr', lum_top=100, lum_bottom=0.5):
         img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
         x3, x5, x7, x9, x11 = self.extractor(img)
         return x3, x5, x7, x9, x11
 
-
-
 class PUPieAppEndToEnd(nn.Module):
     
-    def __init__(self, pu_transformer, dim_transformer, extract_net, compare_net):
+    def __init__(self,state=None):
         nn.Module.__init__(self)
-        self.pu_transformer = pu_transformer
-        self.dim_transformer = dim_transformer
-        self.extractor = extract_net
-        self.comparitor = compare_net
+        self.pu_transformer = PUTransformer()
+        self.dim_transformer = DimTransformer()
+        self.extractor = FeatureExtractor()
+        self.comparitor = Comparitor()
+
+        if state:
+            self.extractor.load_state_dict(state['extractor'])
+            self.comparitor.load_state_dict(state['comparitor'])
 
     def forward(self, img, ref, im_type='ldr', lum_top=100, lum_bottom=0.5, stride=64):
         img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
@@ -42,14 +48,17 @@ class PUPieAppEndToEnd(nn.Module):
 
         return score
 
-
 class PUPieApp(nn.Module):
     
-    def __init__(self, pu_transformer, extract_net, compare_net):
+    def __init__(self, state):
         nn.Module.__init__(self)
-        self.pu_transformer = pu_transformer
-        self.extractor = extract_net
-        self.comparitor = compare_net
+        self.pu_transformer = PUTransformer()
+        self.extractor = FeatureExtractor()
+        self.comparitor = Comparitor()
+
+        if state:
+            self.extractor.load_state_dict(state['extractor'])
+            self.comparitor.load_state_dict(state['comparitor'])
 
     def forward(self, img, ref, im_type='ldr', lum_top=100, lum_bottom=0.5):
         img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
@@ -58,28 +67,3 @@ class PUPieApp(nn.Module):
         f2, c2 = self.extractor(ref)
         f_score, scores, weights = self.comparitor(f1, c1, f2, c2)
         return f_score,scores,weights
-
-class ScoreNet(nn.Module):
-    def __init__(self, extract_net, compare_net):
-        nn.Module.__init__(self)
-        self.extractor = extract_net
-        self.comparitor = compare_net
-
-    def forward(self, img, ref):
-        f1, c1 = self.extractor(img)
-        f2, c2 = self.extractor(ref)
-        f_score, _, _ = self.comparitor(f1, c1, f2, c2)
-        return f_score
-
-class ScoreNetScoresWeights(nn.Module):
-    def __init__(self, extract_net, compare_net):
-        nn.Module.__init__(self)
-        self.extractor = extract_net
-        self.comparitor = compare_net
-
-    def forward(self, img, ref):
-        f1, c1 = self.extractor(img)
-        f2, c2 = self.extractor(ref)
-        f_score, scores, weights = self.comparitor(f1, c1, f2, c2)
-        return f_score,scores,weights
-
