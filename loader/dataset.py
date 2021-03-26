@@ -20,6 +20,9 @@ def identity(x):
 # two values are cache here to save computational time
 _LOGL = None
 _P = None
+
+
+
 def PU_table():
     """
     return lookup table that transform log10(Luminance) to perceptually uniform code values
@@ -53,6 +56,7 @@ def pu(x):
         import ipdb; ipdb.set_trace()
     return scale(pux, P.min(), P.max())
 
+
 def image2tensor(filepath, transform=None):
     """
     read image
@@ -72,6 +76,8 @@ def load_ref_dis_images(path_ref, path_dist,dynamic_range, lum_top=100, lum_bott
     
     return ref_image, dist_image
     
+
+
 def load_image(path_im,dynamic_range, lum_top=100, lum_bottom=0.5):
     
     transforms={'hdr': lambda x: x,
@@ -80,6 +86,8 @@ def load_image(path_im,dynamic_range, lum_top=100, lum_bottom=0.5):
     image = image2tensor(path_im, transforms[dynamic_range])  
     
     return image
+
+
 
 def image2patches(reference, image,  patch_size=64, shift_patch = 64):
 

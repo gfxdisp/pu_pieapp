@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from models.simple import FeatureExtractor, Comparitor, PUTransformer, PerceptualLossFeatureExtractor,DimTransformer
 
 class PerceptLossNet(nn.Module):
-    def __init__(self, state):
+    def __init__(self, state=None):
         nn.Module.__init__(self)
         self.pu_transformer = PUTransformer()
         self.extractor = PerceptualLossFeatureExtractor()
@@ -12,12 +12,12 @@ class PerceptLossNet(nn.Module):
         if state:
             self.extractor.load_state_dict(state['extractor'])
 
-    def forward(self, img, im_type='ldr', lum_top=100, lum_bottom=0.5):
+    def forward(self, img, im_type='sdr', lum_top=100, lum_bottom=0.5):
         img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
         x3, x5, x7, x9, x11 = self.extractor(img)
         return x3, x5, x7, x9, x11
 
-class PUPieAppEndToEnd(nn.Module):
+class PUPieAPP(nn.Module):
     
     def __init__(self,state=None):
         nn.Module.__init__(self)
@@ -30,7 +30,7 @@ class PUPieAppEndToEnd(nn.Module):
             self.extractor.load_state_dict(state['extractor'])
             self.comparitor.load_state_dict(state['comparitor'])
 
-    def forward(self, img, ref, im_type='ldr', lum_top=100, lum_bottom=0.5, stride=64):
+    def forward(self, img, ref, im_type='sdr', lum_top=100, lum_bottom=0.5, stride=64):
         img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
         ref = self.pu_transformer(ref, im_type, lum_top, lum_bottom)
 
@@ -48,9 +48,9 @@ class PUPieAppEndToEnd(nn.Module):
 
         return score
 
-class PUPieApp(nn.Module):
+class PUPieAPPPatch(nn.Module):
     
-    def __init__(self, state):
+    def __init__(self, state=None):
         nn.Module.__init__(self)
         self.pu_transformer = PUTransformer()
         self.extractor = FeatureExtractor()
@@ -60,7 +60,7 @@ class PUPieApp(nn.Module):
             self.extractor.load_state_dict(state['extractor'])
             self.comparitor.load_state_dict(state['comparitor'])
 
-    def forward(self, img, ref, im_type='ldr', lum_top=100, lum_bottom=0.5):
+    def forward(self, img, ref, im_type='sdr', lum_top=100, lum_bottom=0.5):
         img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
         ref = self.pu_transformer(ref, im_type, lum_top, lum_bottom)
         f1, c1 = self.extractor(img)

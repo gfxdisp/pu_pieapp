@@ -154,9 +154,11 @@ class DimTransformer(nn.Module):
         ImBS, ImC, ImH, ImW =  images.shape
         # Patch Batch Size
 
-        PBS = int(ImBS*self.calc_numb_patches(ImH,ImW,self.pH,stride))
+        #PBS = int(ImBS*self.calc_numb_patches(ImH,ImW,self.pH,stride))
         patches = images.unfold(2, self.pH, stride).unfold(3, self.pW, stride)
         patches = pt.transpose(patches,1,3)
+
+        PBS = int(pt.numel(patches)/ImC/self.pH/self.pW)
         patches = patches.reshape(PBS,ImC,self.pH,self.pW)
         return patches,PBS,ImBS
 
@@ -165,9 +167,7 @@ class DimTransformer(nn.Module):
 class PUTransformer(nn.Module):
     def __init__(self):
         nn.Module.__init__(self)
-        #PU_table = pd.read_csv(path.join( './loader/pu_space.csv'), header=None, names=['L', 'P'])
-        #self.logL = pt.log10(pt.tensor(PU_table['L']))
-        #self.P = pt.tensor(PU_table['P'])
+
         self.P_min =0.3176
         self.P_max =1270.1545
         self.logL_min = -1.7647
@@ -176,7 +176,7 @@ class PUTransformer(nn.Module):
         self.third_order = pt.tensor([2.5577829 , 17.73608751, 48.96952155, 45.55950728])
         self.epsilon = 1e-8
         
-    def forward(self, im, im_type='ldr', lum_top=100, lum_bottom=0.5):
+    def forward(self, im, im_type='sdr', lum_top=100, lum_bottom=0.5):
         
         im = self.apply_disp_model( im,im_type, lum_top=100, lum_bottom=0.5)
         im = self.clamp_image(im)
