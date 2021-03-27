@@ -3,7 +3,6 @@ import torch as pt
 import pandas as pd
 import torch.nn as nn
 import torch.nn.functional as F
-from collections import OrderedDict
 
 def init_weights(m):
     if type(m) == nn.Linear:
@@ -20,47 +19,6 @@ class Func(nn.Module):
 
     def forward(self, *input):
         return self.functional(*input)
-
-
-class PerceptualLossFeatureExtractor(nn.Module):
-    def __init__(self):
-        nn.Module.__init__(self)
-        self.conv1 = nn.Conv2d(3,64,3,padding=1)
-        self.conv2 = nn.Conv2d(64,64,3,padding=1)
-        self.pool2 = nn.MaxPool2d(2,2)
-        self.conv3 = nn.Conv2d(64,64,3,padding=1)
-        self.conv4 = nn.Conv2d(64,128,3,padding=1)
-        self.pool4 = nn.MaxPool2d(2,2)
-        self.conv5 = nn.Conv2d(128,128,3,padding=1)
-        self.conv6 = nn.Conv2d(128,128,3,padding=1)
-        self.pool6 = nn.MaxPool2d(2,2)
-        self.conv7 = nn.Conv2d(128,256,3,padding=1)
-        self.conv8 = nn.Conv2d(256,256,3,padding=1)
-        self.pool8 = nn.MaxPool2d(2,2)
-        self.conv9 = nn.Conv2d(256,256,3,padding=1)
-        self.conv10 = nn.Conv2d(256,512,3,padding=1)
-        self.pool10 = nn.MaxPool2d(2,2)
-        self.conv11 = nn.Conv2d(512,512,3,padding=1)
-        self.apply(init_weights)
-
-    def forward(self, input):
-        """
-        if the input
-        """
-        #print("\tIn Model: input size", input.size()) 
-        #conv1 -> relu -> conv2 -> relu -> pool2 -> conv3 -> relu
-        x3 = F.relu(self.conv3(self.pool2(F.relu(self.conv2(F.relu(self.conv1(input)))))))
-        # conv4 -> relu -> pool4 -> conv5 -> relu
-        x5 = F.relu(self.conv5(self.pool4(F.relu(self.conv4(x3)))))
-        # conv6 -> relu -> pool6 -> conv7 -> relu
-        x7 = F.relu(self.conv7(self.pool6(F.relu(self.conv6(x5)))))
-        # conv8 -> relu -> pool8 -> conv9 -> relu
-        x9 = F.relu(self.conv9(self.pool8(F.relu(self.conv8(x7)))))
-        # conv10 -> relu -> pool10 -> conv11 -> relU
-        x11 = F.relu(self.conv11(self.pool10(F.relu(self.conv10(x9)))))
-
-        return x3, x5, x7, x9, x11
-
 
 
 class FeatureExtractor(nn.Module):

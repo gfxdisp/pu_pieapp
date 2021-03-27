@@ -1,21 +1,8 @@
 import torch as pt
 import torch.nn as nn
 import torch.nn.functional as F
-from models.simple import FeatureExtractor, Comparitor, PUTransformer, PerceptualLossFeatureExtractor,DimTransformer
+from models.simple import FeatureExtractor, Comparitor, PUTransformer,DimTransformer
 
-class PerceptLossNet(nn.Module):
-    def __init__(self, state=None):
-        nn.Module.__init__(self)
-        self.pu_transformer = PUTransformer()
-        self.extractor = PerceptualLossFeatureExtractor()
-
-        if state:
-            self.extractor.load_state_dict(state['extractor'])
-
-    def forward(self, img, im_type='sdr', lum_top=100, lum_bottom=0.5):
-        img = self.pu_transformer(img, im_type,  lum_top, lum_bottom)
-        x3, x5, x7, x9, x11 = self.extractor(img)
-        return x3, x5, x7, x9, x11
 
 class PUPieAPP(nn.Module):
     

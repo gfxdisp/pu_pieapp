@@ -1,0 +1,6 @@
+numpy==1.19.5
+imageio==2.9.0
+matplotlib==3.3.1
+torch==1.6.0
+pandas==1.0.5
+scipy==1.4.1

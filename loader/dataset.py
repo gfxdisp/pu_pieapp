@@ -8,9 +8,6 @@ import math
 from imageio import imread
 import pandas as pd
 
-import re
-import os
-import os.path as path
 from glob import glob
 
 def identity(x):
@@ -30,8 +27,7 @@ def PU_table():
     global _LOGL
     global _P
     if _LOGL is None or _P is None:
-        PU_table = pd.read_csv(
-                path.join( './loader/pu_space.csv'),
+        PU_table = pd.read_csv('./loader/pu_space.csv',
                 header=None, names=['L', 'P'])
         logL = np.log10(np.array(PU_table['L']))
         P = np.array(PU_table['P'])
@@ -90,7 +86,9 @@ def load_image(path_im,dynamic_range, lum_top=100, lum_bottom=0.5):
 
 
 def image2patches(reference, image,  patch_size=64, shift_patch = 64):
-
+    '''
+    Split image into patches. The patches are extracted in a grid like manner.
+    '''
 
     _,H, W = reference.shape
     
@@ -148,6 +146,9 @@ def image2patches(reference, image,  patch_size=64, shift_patch = 64):
 
 
 def patches2image(patches, weights, scores, score_weights, patch_size=64, shift_patch = 64):
+    '''
+    Function merge patches into an image. 
+    '''
 
     (H, W) = np.shape(weights)
     output_image = np.zeros(shape=(3, H, W))
