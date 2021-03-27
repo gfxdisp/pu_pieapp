@@ -20,7 +20,58 @@ pip3 install -r requirements.txt
 
 An example running the metric:
 
+```python
+import numpy as np
+import imageio
+import torch as pt
+from models.common import PUPieAPP
 
+# Load saved weights
+saved_state_model = './pupieapp_weights.pt'
+state = pt.load(saved_state_model, map_location='cpu')
+
+# Create and load the model
+net = PUPieAPP(state)
+
+# Set to evaluation mode
+net.eval();
+
+
+# Path to reference and distorted iamges
+path_reference_image = './example_images/sdr_ref_1.bmp'
+path_test_image ='./example_images/sdr_test_1.bmp'
+
+# Dynamic range of the images
+dynamic_range = 'sdr'
+
+# Parameters of the display model (Assuming peak and black level of a display on which LDR image is shown).
+# Set to 100 and 0.5 if unsure. The parameter is not used for HDR images as these are given in luminance values.
+lum_top = 100
+lum_bottom = 0.5
+
+# The quality assessment model operates on 64x64 patches sampled on a regular grid. 
+# The shift specifies the window shift for sampling the patchs. The smaller the shift the more accurate the model is.
+stride = 32
+
+# Read images 
+image_ref = imageio.imread(path_reference_image)
+image_ref = pt.from_numpy(imageio.core.asarray(image_ref))
+image_ref = image_ref.permute(2,0,1)
+
+image_test = imageio.imread(path_test_image)
+image_test = pt.from_numpy(imageio.core.asarray(image_test))
+image_test = image_test.permute(2,0,1)
+
+# Unsqueeze to create batch dimension
+image_ref = image_ref.unsqueeze(0)
+image_test = image_test.unsqueeze(0)
+
+# Run the network with no gradient
+with pt.no_grad():
+    score = net(image_ref, image_test, im_type=dynamic_range, lum_bottom=lum_bottom, lum_top=lum_top, stride=stride)
+    
+print('PU-PieAPP Quality Score: ', score.item())
+```
 
 ## Citing
 
