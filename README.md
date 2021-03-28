@@ -8,9 +8,17 @@ Increasing popularity of HDR image and video content brings the need for metrics
 
 ## Usage
 
+Clone the repository:
+
+```
+git clone https://github.com/gfxdisp/upiq.git
+cd upiq
+```
+
 Download the weights:
-
-
+```
+wget
+```
 
 The code runs in Python3 with Pytorch. Dependencies can be installed by running:
 
