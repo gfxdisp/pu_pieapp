@@ -15,10 +15,9 @@ git clone https://github.com/gfxdisp/upiq.git
 cd upiq
 ```
 
-Download the weights:
-```
-wget
-```
+To get the weights - navigate to the release section and download pupieapp_weights.pt. 
+
+To use the weights - move the weights into the head directory (with README.md).
 
 The code runs in Python3 with Pytorch. Dependencies can be installed by running:
 
