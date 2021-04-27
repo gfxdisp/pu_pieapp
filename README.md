@@ -2,6 +2,8 @@
 
 The repository contains the code for the Deep High-Dynamic-Range Image Quality metric -- PU-PieAPP trained on the [Unified Photometric Image Quality (UPIQ) dataset](https://www.repository.cam.ac.uk/handle/1810/315373)
 
+The network trained on UPIQ dataset is identical to the original [PieAPP](https://github.com/prashnani/PerceptualImageError) architecture, however extended to account for luminance.
+
 ## Description
 
 Increasing popularity of HDR image and video content brings the need for metrics that could predict the severity of image impairments as seen on displays of different brightness levels and dynamic range. Such metrics should be trained and validated on a sufficiently large subjective image quality dataset to ensure robust performance. As the existing HDR quality datasets are limited in size, we created a Unified Photometric Image Quality dataset (UPIQ) with over 4,000 images by realigning and merging existing HDR and SDR datasets. The realigned quality scores share the same unified quality scale across all datasets. Such realignment was achieved by collecting additional cross-dataset quality comparisons and re-scaling data with a psychometric scaling method. Images in the proposed dataset are represented in absolute photometric and colorimetric units, corresponding to light emitted from a display. We use the new dataset to train a new deep photometric image quality metric (PU-PieAPP) which outperforms existing metrics on high-dynamic image quality prediction. For more information please refer to the [project page](https://www.cl.cam.ac.uk/research/rainbow/projects/upiq/).
